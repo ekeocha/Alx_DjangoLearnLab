@@ -1,7 +1,9 @@
 from relationship_app.models import Author, Book, Library, Librarian
 
 # --- Sample Data Creation (optional, for testing) ---
-author = Author.objects.create(name="George Orwell")
+author = Author.objects.get(name=author_name)  
+books_by_author = Book.objects.filter(author=author)
+
 book1 = Book.objects.create(title="1984", author=author)
 book2 = Book.objects.create(title="Animal Farm", author=author)
 

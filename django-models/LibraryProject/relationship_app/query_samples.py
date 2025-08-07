@@ -9,7 +9,7 @@ library = Library.objects.create(name="Central Library")
 library.books.set([book1, book2])
 
 librarian = Librarian.objects.create(name="John Doe", library=library)
-
+library = Library.objects.get(name=library_name)
 # --- Queries ---
 # 1. Query all books by a specific author
 print("Books by George Orwell:")

@@ -19,7 +19,7 @@ library = Library.objects.get(name=library_name)
 print("Books by George Orwell:")
 for book in author.books.all():
     print(book.title)
-
+ 
 # 2. List all books in a library
 print("\nBooks in Central Library:")
 for book in library.books.all():

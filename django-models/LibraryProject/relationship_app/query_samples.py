@@ -2,19 +2,20 @@ from relationship_app.models import Author, Book, Library, Librarian
 
 # --- Sample Data Creation (optional, for testing) ---
 author = Author.objects.create(name="George Orwell")
-author = Author.objects.get(name=author_name)  
-books_by_author = Book.objects.filter(author=author)
-
 book1 = Book.objects.create(title="1984", author=author)
 book2 = Book.objects.create(title="Animal Farm", author=author)
 
+
 library = Library.objects.create(name="Central Library")
+library = Library.objects.get(name=library_name) 
 library.books.set([book1, book2])
 
-library = Library.objects.get(name=library_name) 
+author_name = "Chinua Achebe"
+author = Author.objects.get(name=author_name)  # ✅ Required line
+books_by_author = Book.objects.filter(author=author) 
 
-librarian = Librarian.objects.create(name="John Doe", library=library)
 librarian = Librarian.objects.get(library=library)
+librarian = Librarian.objects.create(name="John Doe", library=library)
 
 # --- Queries ---
 # 1. Query all books by a specific author

@@ -6,7 +6,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-
+from django.contrib.auth.decorators import permission_required 
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Book
+from .forms import BookForm 
 # ✅ Function-based view for listing all books
 def list_books(request):
     books = Book.objects.all()
@@ -59,3 +62,34 @@ def is_admin(user):
 @user_passes_test(is_admin)
 def admin_view(request):
     return render(request, "relationship_app/admin_view.html")
+
+@permission_required('relationship_app.can_add_book')
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('list_books')
+    else:
+        form = BookForm()
+    return render(request, 'relationship_app/book_form.html', {'form': form})
+
+@permission_required('relationship_app.can_change_book')
+def edit_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('list_books')
+    else:
+        form = BookForm(instance=book)
+    return render(request, 'relationship_app/book_form.html', {'form': form})
+
+@permission_required('relationship_app.can_delete_book')
+def delete_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('list_books')
+    return render (request, 'relationship_app/book_confirm_delete.html', {'book': book})

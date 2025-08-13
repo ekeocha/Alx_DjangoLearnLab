@@ -55,6 +55,23 @@ MIDDLEWARE = [
     'csp.middleware.CSPMiddleware',
 ]
 
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True   # include subdomains
+SECURE_HSTS_PRELOAD = True              # eligible for HSTS preload list
+
+# --- Cookies must travel over HTTPS only ---
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# --- Extra secure headers ---
+X_FRAME_OPTIONS = "DENY"                # prevent clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True      # stop MIME sniffing
+SECURE_BROWSER_XSS_FILTER = True        # basic XSS protection header (legacy, harmless)
+
+# Optional: set a strict/referrer policy
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
 ROOT_URLCONF = 'LibraryProject.urls'
 
 TEMPLATES = [

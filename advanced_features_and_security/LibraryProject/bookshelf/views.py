@@ -9,7 +9,8 @@ from django.shortcuts import redirect, get_object_or_404
 from django.db.models import Q
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
-from .forms import BookForm, SearchForm
+from .forms import ExampleForm 
+
 
 
 @permission_required('relationship_app.can_create', raise_exception=True)

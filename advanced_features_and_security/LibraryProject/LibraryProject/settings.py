@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'relationship_app',
     'advanced_features_and_security',
+    'csp',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -58,7 +60,7 @@ ROOT_URLCONF = 'LibraryProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'Templates')],
+        'DIRS': [BASE_DIR/ 'Templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,6 +74,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'LibraryProject.wsgi.application'
 
+CSRF_COOKIE_SECURE = True        # send CSRF cookie over HTTPS only
+SESSION_COOKIE_SECURE = True     # send session cookie over HTTPS only
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True     # adds X-XSS-Protection for older browsers
+X_FRAME_OPTIONS = "DENY"             # prevent clickjacking (no iframes)
+
+# Stronger TLS headers (enable in production with HTTPS)
+SECURE_HSTS_SECONDS = 31536000       # 1 year HSTS
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# --- Content Security Policy (CSP) ---
+# Restrict what the browser is allowed to load.
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)          # add CDNs if you must: e.g. "https://cdn.example.com"
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")  # allow inline only if needed
+CSP_IMG_SRC = ("'self'", "data:")
+CSP_FONT_SRC = ("'self'", "data:")
+CSP_CONNECT_SRC = ("'self'",)
+CSP_FRAME_ANCESTORS = ("'none'",)
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

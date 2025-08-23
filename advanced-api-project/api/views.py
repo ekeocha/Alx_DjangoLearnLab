@@ -4,7 +4,7 @@ from .models import Book
 from .serializers import BookSerializer
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
 
@@ -15,6 +15,17 @@ class BookListView(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'author']
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+
+    # Fields to filter by
+    filterset_fields = ['title', 'author', 'publication_year']
+
+    # Fields to search
+    search_fields = ['title', 'author']
+
+    # Fields to order by
+    ordering_fields = ['title', 'publication_year']
+    ordering = ['title']  # Default ordering
 
 #Retrieve a particular book(open to anyone)
 class BookDetailView(generics.ListAPIView):

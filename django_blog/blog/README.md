@@ -92,4 +92,18 @@ This authentication system handles user **registration, login, logout, and profi
 
 ✅ With this, your authentication system is **complete, secure, and documented**.
 
-Do you want me to also create a **README.md** file version of this so you can just drop it in your project?
+## Blog Post CRUD
+
+- List posts: GET /posts/
+- View post:  GET /posts/<pk>/
+- Create post: (auth) GET/POST /posts/new/
+- Edit post:   (author only) GET/POST /posts/<pk>/edit/
+- Delete post: (author only) POST /posts/<pk>/delete/
+
+Permissions:
+- Anyone can view list & detail.
+- Only authenticated users can create.
+- Only the author can edit or delete their own posts.
+
+
+

@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
+from .models import Post
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -25,3 +26,16 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['bio', 'profile_picture']
+
+
+class PostForm(forms.ModelForm):
+    """Form used for creating/updating posts. Author is set in the view."""
+    class Meta:
+        model = Post
+        fields = ["title", "content"]  # author & published_date handled automatically
+
+    def clean_title(self):
+        title = self.cleaned_data["title"].strip()
+        if not title:
+            raise forms.ValidationError("Title cannot be empty.")
+        return title

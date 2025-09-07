@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Posts</title>
+</head>
+<body>
+  <h1>Blog Posts</h1>
+
+  {% if user.is_authenticated %}
+    <p><a href="{% url 'post_create' %}">+ New Post</a></p>
+  {% else %}
+    <p><a href="{% url 'login' %}">Log in</a> to create a post.</p>
+  {% endif %}
+
+  <ul>
+    {% for post in posts %}
+      <li>
+        <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+        — by {{ post.author.username }} on {{ post.published_date|date:"Y-m-d H:i" }}
+      </li>
+    {% empty %}
+      <li>No posts yet.</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

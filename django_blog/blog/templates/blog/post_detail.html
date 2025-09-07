@@ -19,5 +19,58 @@
       <a href="{% url 'post_delete' post.pk %}">Delete</a>
     </p>
   {% endif %}
+
+{% block content %}
+  <article>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content|linebreaksbr }}</p>
+    <p><small>By {{ post.author }} • {{ post.published_date|date:"Y-m-d H:i" }}</small></p>
+  </article>
+
+  <hr>
+
+  <section>
+    <h2>Comments ({{ comments|length }})</h2>
+
+    <ul>
+      {% for comment in comments %}
+        <li>
+          <p>{{ comment.content|linebreaksbr }}</p>
+          <small>
+            by {{ comment.author }} • {{ comment.created_at|date:"Y-m-d H:i" }}
+            {% if comment.updated_at and comment.updated_at != comment.created_at %}
+              (edited {{ comment.updated_at|date:"Y-m-d H:i" }})
+            {% endif %}
+          </small>
+          {% if user.is_authenticated and user == comment.author %}
+            • <a href="{% url 'comment_edit' comment.pk %}">Edit</a>
+            • <a href="{% url 'comment_delete' comment.pk %}">Delete</a>
+          {% endif %}
+        </li>
+      {% empty %}
+        <li>No comments yet.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <hr>
+
+  <section>
+    <h3>Add a comment</h3>
+    {% if user.is_authenticated %}
+      <form method="post" action="{% url 'comment_create' post_id=post.pk %}">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Post comment</button>
+      </form>
+    {% else %}
+      <p>
+        <a href="{% url 'login' %}">Log in</a> to comment.
+      </p>
+    {% endif %}
+  </section>
+{% endblock %}
+
+
 </body>
 </html>
